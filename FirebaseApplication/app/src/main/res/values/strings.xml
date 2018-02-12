@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FirebaseApplication</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="default_notification_channel_name" translatable="true">News</string>
+    <string name="default_notification_channel_description" translatable="true">Notification description</string>
+
+    <array name="topics">
+        <item>notification</item>
+        <item>news</item>
+    </array>
+</resources>
