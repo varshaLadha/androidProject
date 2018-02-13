@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lcom151_two.crudeoperations.Update">
+
+    <EditText
+        android:id="@+id/uemail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:hint="Enter email"/>
+
+    <EditText
+        android:id="@+id/upassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter password"
+        android:password="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/uemail"/>
+
+    <EditText
+        android:id="@+id/ufname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter firstname"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/upassword"/>
+
+    <EditText
+        android:id="@+id/ulname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter lastname"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ufname"/>
+
+    <EditText
+        android:id="@+id/umobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter mobileno"
+        android:numeric="integer"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/ulname"/>
+
+    <Button
+        android:id="@+id/update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Record"
+        android:textAllCaps="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/umobile"/>
+</RelativeLayout>
