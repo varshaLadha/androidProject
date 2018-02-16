@@ -1,10 +1,8 @@
 const express=require('express'),
     bodyParser=require('body-parser'),
     mongoose=require('mongoose'),
-    html=require('html'),
     validator=require('validator'),
     bcrypt=require('bcryptjs'),
-    path=require('path'),
     fs=require('fs');
 
 var app=express();
@@ -13,7 +11,6 @@ app.use(express.static(__dirname+'/images/'));
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: true, limit: '50mb'}));
-app.set('view engine','ejs')
 app.use(bodyParser())
 
 mongoose.connect('mongodb://localhost:27017/ImageDB',(err,db) => {
@@ -77,18 +74,18 @@ var fields=mongoose.Schema({
     }
 })
 
-fields.pre('save', function (next) {
+fields.pre('save', function (next) {    //middleware called everytime before a new user is saved. Purpose of it is to encrypt the password.
     var table=this;
 
     if(table.isModified('password')) {
-        table.password=bcrypt.hashSync(table.password,10);
+        table.password=bcrypt.hashSync(table.password);
         next();
     }else {
         next();
     }
 });
 
-fields.statics.comparePassword = function(email,password){
+fields.statics.comparePassword = function(email,password){      //middleware called from within login and checks the password gave by user to encrypted password
     var table = this;
     return table.findOne({email}).then((user) => {
         if(!user){
@@ -109,13 +106,7 @@ fields.statics.comparePassword = function(email,password){
 
 var table=mongoose.model('User',fields);    //collection(table) is created with name users ie plural form of what we provide & all characters in small case
 
-
-/*app.get('/',(req,res) => {
-    res.render('login.ejs')
-})*/
-
 app.post('/login',(req,res) => {
-    //console.log(req.body.email+ " "+req.body.password);
     if(req.body.email=="" || req.body.password==""){
         return res.send({"success":0,"msg":"email & password is required"})
     }
@@ -127,15 +118,10 @@ app.post('/login',(req,res) => {
     });
 })
 
-app.get('/registerUser',(req,res) => {
-    res.render('register.ejs')
-})
-
 app.post('/register',(req,res) => {
     let usr=table()
 
     if(req.body.email=="" || req.body.lastName=="" || req.body.firstName=="" || req.body.password=="" || req.body.mobile==""){
-        //console.log(req.body.email+" "+req.body.password);
         return res.send({"success":0,"msg":"Please enter all details","err":" "})
     }
 
@@ -147,16 +133,16 @@ app.post('/register',(req,res) => {
     usr.lastName=req.body.lastName
     usr.mobile=req.body.mobile
     usr.img=img
-    fs.writeFileSync("images/"+img,new Buffer(req.body.sampleFile,"base64"),() => {});
+
     usr.save().then((ress) => {
-        //res.render('register.ejs')
+        fs.writeFileSync("images/"+img,new Buffer(req.body.sampleFile,"base64"),() => {});
         res.send({"success":1,"msg":"user registered successfully"});
         console.log(ress)
-    }).catch((err) => res.send({"success":0,"msg":"Problem inserting data. Please enter valid data"}));
+    }).catch((err) => res.send({"success":0,"msg":"Problem inserting data. Please enter valid data","err":err}));
 })
 
 app.get('/display', (req,res) =>{
-    table.find().then((data) => {
+    table.find({}).select("firstName -_id").then((data) => {    //returns only value for firstName. By default _id is also returned so to avoid it we provided -_id
         if(data==null){
             return res.send({"success":0,"msg":"Nodata found"})
         }else {
@@ -170,6 +156,7 @@ app.post('/delete', (req,res) =>{
         if(result==null){
             return res.send({"success":0,"msg":"couldnt delete data"});
         } else {
+            fs.unlinkSync(__dirname+"/images/"+result.img);
             return res.send({"success":1,"data":result});
         }
     });
@@ -186,11 +173,10 @@ app.post('/findOne', (req,res) => {
 })
 
 app.post('/update', (req,res) => {
-    //console.log(req.body);
     if(req.body.email=="" || req.body.fname=="" || req.body.lastName=="" || req.body.firstName=="" || req.body.password=="" || req.body.mobile==""){
         return res.send({"success":0,"msg":"Please enter all the details"})
     }
-
+                                                                                        // encrypts the password before updating
     table.findOneAndUpdate({"firstName":req.body.fname}, {$set: {"email":req.body.email,"password":bcrypt.hashSync(req.body.password),"firstName":req.body.firstName,"lastName":req.body.lastName,"mobile":req.body.mobile}},{new:true}).then((ress) => {
         res.send({"success":1,"msg":"data updated",ress})
     }).catch((err) => {
