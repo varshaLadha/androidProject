@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="title_shop">Shop</string>
+    <string name="title_gifts">Gifts</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_profile">Profile</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="about1">Amazing Mexican Fillipino fussion place offers the sickest california burrito in SF</string>
+    <string name="about2">The place is located 10 min from you at 1479 Folsom St on the corner of 11th St.</string>
+    <string name="user1">Lorem Ipsum is simply dummy  text of the printing and type-setting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500's</string>
+    <string name="user2">Lorem Ipsum is simply dummy  text of the printing and type-setting industry.</string>
+</resources>
