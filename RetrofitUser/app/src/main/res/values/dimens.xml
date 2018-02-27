@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="tsize">20sp</dimen>
+    <dimen name="leftmargin">10sp</dimen>
+</resources>
