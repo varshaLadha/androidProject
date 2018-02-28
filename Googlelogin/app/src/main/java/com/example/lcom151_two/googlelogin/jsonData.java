@@ -2,7 +2,9 @@ package com.example.lcom151_two.googlelogin;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,8 +37,11 @@ import java.util.ArrayList;
 // getting restaurant info - https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJqaQh949N4DsRhp0NHviKoV4&key=AIzaSyBBGWb127YoPrccqFOlpSglAlVTIBgOvHQ
 // latitude = 21.14711  longitude = 72.760305
 
-public class jsonData extends AppCompatActivity {
+//banquet,restaurants,hotel,mall
 
+public class jsonData extends AppCompatActivity implements  LocationListener{
+
+    private static final String TAG = "jsonData";
     //TextView txtData;
     ArrayList hotelName,hotelAddress,url,urlCall;
     GridView gs;
@@ -43,6 +49,11 @@ public class jsonData extends AppCompatActivity {
     double latitude,longitude;
     LocationManager locationManager;
     LocationListener locationListener;
+    String place;
+    private boolean isGPSEnabled;
+    private boolean isNetworkEnabled;
+    private Location location;
+    private String mprovider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,24 +61,26 @@ public class jsonData extends AppCompatActivity {
         setContentView(R.layout.activity_json_data);
 
         //txtData=(TextView)findViewById(R.id.textView2);
+        Intent intent=getIntent();
+        place=intent.getStringExtra("place");
 
         locationManager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        locationListener=new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                latitude=location.getLatitude();
-                longitude=location.getLongitude();
+        Criteria criteria = new Criteria();
+
+        mprovider = locationManager.getBestProvider(criteria, false);
+
+        if (mprovider != null && !mprovider.equals("")) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
             }
+            Location location = locationManager.getLastKnownLocation(mprovider);
+            locationManager.requestLocationUpdates(mprovider, 15000, 1, this);
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) { }
-
-            @Override
-            public void onProviderEnabled(String provider) { }
-
-            @Override
-            public void onProviderDisabled(String provider) { }
-        };
+            if (location != null)
+                onLocationChanged(location);
+            else
+                Toast.makeText(getBaseContext(), "No Location Provider Found Check Your Code", Toast.LENGTH_SHORT).show();
+        }
 
         if(Build.VERSION.SDK_INT<23){
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED){
@@ -77,16 +90,7 @@ public class jsonData extends AppCompatActivity {
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this,new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},1);
             }else{
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
-
-                Location location=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                if(location!=null){
-
-                    latitude=location.getLatitude();
-                    longitude=location.getLongitude();
-
-                }
+                Log.e(TAG, "onCreate: " + " Access Location ! ");
             }
         }
 
@@ -96,13 +100,17 @@ public class jsonData extends AppCompatActivity {
         urlCall=new ArrayList();
         gs=(GridView) findViewById(R.id.gs);
 
-        StringRequest sr=new StringRequest(Request.Method.GET, "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+latitude+","+longitude+"&radius=5000&keyword=restaurants&key=AIzaSyBBGWb127YoPrccqFOlpSglAlVTIBgOvHQ", new Response.Listener<String>() {
+        Log.e(TAG, "onCreate: Latitude : "+ latitude + " : Longitude : " + longitude + " Place : " + place);
+
+        StringRequest sr=new StringRequest(Request.Method.GET, "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+latitude+","+longitude+"&radius=5000&keyword="+place+"&key=AIzaSyBBGWb127YoPrccqFOlpSglAlVTIBgOvHQ", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try{
+                    Log.e(TAG, "onResponse: ");
                     JSONObject jobj=new JSONObject(response);
                     JSONArray jaaray=jobj.getJSONArray("results");
 
+                    Log.e(TAG, "onResponse: Array Lenght : "+ jaaray.length());
                     for(int i=0;i<jaaray.length();i++){
                         JSONObject data=jaaray.getJSONObject(i);
 
@@ -134,6 +142,7 @@ public class jsonData extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "onErrorResponse: ");
                 Toast.makeText(jsonData.this, "Volley Error "+error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -150,5 +159,28 @@ public class jsonData extends AppCompatActivity {
                 locationManager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
             }
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if(location != null){
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 }

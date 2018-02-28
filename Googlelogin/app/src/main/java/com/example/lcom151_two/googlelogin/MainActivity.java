@@ -83,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
+            //Toast.makeText(this, "Email : "+account.getEmail()+" \nAccount : "+account.getAccount()+"\nDisplay name : "+account.getDisplayName()+"\nID token : "+account.getIdToken(), Toast.LENGTH_LONG).show();
+
             // Signed in successfully, show authenticated UI.
             Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show();
             signInButton.setVisibility(View.GONE);

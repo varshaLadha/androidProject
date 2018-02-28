@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -17,14 +18,16 @@
         <activity android:name=".Welcome" />
         <activity android:name=".jsonData"></activity>
         <activity android:name=".ImaageUrl" />
-        <activity android:name=".NodeApi">
+        <activity android:name=".NodeApi" />
+        <activity android:name=".Main2Activity" />
+        <activity android:name=".PlacesInfo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main2Activity"></activity>
+        <activity android:name=".passportGoogle"></activity>
     </application>
 
 </manifest>

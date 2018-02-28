@@ -26,6 +26,9 @@ public class Welcome extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         signout=(Button)findViewById(R.id.signOut);
+    }
+
+    public void logout(GoogleSignInClient mGoogleSignInClient){
 
     }
 }

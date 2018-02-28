@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lcom151_two.googlelogin.PlacesInfo">
+
+    <Button
+        android:id="@+id/restaurants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:onClick="searchPlace"
+        android:text="Get near by restaurants"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/hotels"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/restaurants"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:onClick="searchPlace"
+        android:text="Get near by hotels"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/mall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/hotels"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:onClick="searchPlace"
+        android:text="Get near by malls"
+        android:textAllCaps="false" />
+
+    <Button
+        android:id="@+id/banquet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mall"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:onClick="searchPlace"
+        android:text="Get near by banquets"
+        android:textAllCaps="false" />
+
+</RelativeLayout>

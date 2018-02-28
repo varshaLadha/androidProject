@@ -6,10 +6,31 @@
     android:layout_height="match_parent"
     tools:context="com.example.lcom151_two.googlelogin.Main2Activity">
 
+    <LinearLayout
+        android:id="@+id/pagination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&lt;&lt; Previous"/>
+
+        <Button
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next &gt;&gt;" />
+    </LinearLayout>
+
     <GridView
         android:id="@+id/gridView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:numColumns="3"></GridView>
+        android:layout_below="@+id/pagination">
+
+    </GridView>
 
 </RelativeLayout>
