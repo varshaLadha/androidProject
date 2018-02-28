@@ -104,7 +104,7 @@ public class MainActivity extends BaseClass {
         byte[] imageBytes=baos.toByteArray();
         sampleFile= Base64.encodeToString(imageBytes,Base64.DEFAULT);
 
-        Log.i("Data","Fname "+fname+"\nLname : "+lname+"\nEmail : "+email+"\nPassword : "+password+"\n Mobile : "+mobile+"\nSample File : "+sampleFile );
+        //Log.i("Data","Fname "+fname+"\nLname : "+lname+"\nEmail : "+email+"\nPassword : "+password+"\n Mobile : "+mobile+"\nSample File : "+sampleFile );
 
         Call<InsertUserResponseModel> call=apiInterface.user(fname,lname,email,password,mobile,sampleFile);
         call.enqueue(new Callback<InsertUserResponseModel>() {

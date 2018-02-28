@@ -2,7 +2,7 @@ package com.example.lcom151_two.retrofituser;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.BottomSheetDialog;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,9 +16,10 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import io.fabric.sdk.android.Fabric;
 import java.util.List;
 
 import retrofit2.Call;
@@ -37,25 +38,12 @@ public class display extends BaseClass {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_display);
 
-        name=(TextView)findViewById(R.id.name);
-        email=(TextView)findViewById(R.id.email);
-        mobile=(TextView)findViewById(R.id.mobile);
         gridView=(GridView)findViewById(R.id.gridview);
-        imageView=(ImageView)findViewById(R.id.imageView);
-        close=(ImageButton) findViewById(R.id.close);
         insert=(Button)findViewById(R.id.insert);
         displayLayout=(LinearLayout)findViewById(R.id.displayLayout);
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageView.setImageDrawable(null);
-                displayLayout.setVisibility(View.GONE);
-                close.setVisibility(View.GONE);
-            }
-        });
 
         insert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,8 +82,22 @@ public class display extends BaseClass {
                                 public boolean onMenuItemClick(MenuItem item) {
                                     switch (item.getItemId()){
                                         case R.id.view:
-                                            displayLayout.setVisibility(View.VISIBLE);
-                                            close.setVisibility(View.VISIBLE);
+                                            View v=getLayoutInflater().inflate(R.layout.fragment_bottom_sheet_dialog,null);
+                                            name=(TextView)v.findViewById(R.id.name);
+                                            email=(TextView)v.findViewById(R.id.email);
+                                            mobile=(TextView)v.findViewById(R.id.mobile);
+                                            imageView=(ImageView)v.findViewById(R.id.imageView);
+                                            close=(ImageButton)v.findViewById(R.id.close);
+                                            final BottomSheetDialog bottomSheetDialog=new BottomSheetDialog(display.this);
+                                            bottomSheetDialog.setContentView(v);
+                                            bottomSheetDialog.show();
+
+                                            close.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    bottomSheetDialog.dismiss();
+                                                }
+                                            });
                                             getInfo(names.get(position).toString());
                                             break;
                                         case R.id.delete:

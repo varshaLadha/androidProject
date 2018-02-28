@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Update"></activity>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="8261ffc97b6d4d9e1baeb66b4295b43091a627b6" />
     </application>
 
 </manifest>
