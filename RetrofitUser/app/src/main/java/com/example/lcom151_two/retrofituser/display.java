@@ -3,11 +3,16 @@ package com.example.lcom151_two.retrofituser;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,8 +30,10 @@ public class display extends BaseClass {
     GridView gridView;
     TextView name,email,mobile;
     ImageView imageView;
-    ArrayList names;
-    ArrayAdapter adapter;
+    ImageButton close;
+    Button insert;
+    LinearLayout displayLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +44,27 @@ public class display extends BaseClass {
         mobile=(TextView)findViewById(R.id.mobile);
         gridView=(GridView)findViewById(R.id.gridview);
         imageView=(ImageView)findViewById(R.id.imageView);
-        names=new ArrayList();
+        close=(ImageButton) findViewById(R.id.close);
+        insert=(Button)findViewById(R.id.insert);
+        displayLayout=(LinearLayout)findViewById(R.id.displayLayout);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.setImageDrawable(null);
+                displayLayout.setVisibility(View.GONE);
+                close.setVisibility(View.GONE);
+            }
+        });
+
+        insert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(display.this,MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         display();
     }
@@ -58,12 +85,33 @@ public class display extends BaseClass {
 
                     gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Intent i=new Intent(display.this,Update.class);
-                            i.putExtra("name", (String) names.get(position));
-                            startActivity(i);
-                            //getInfo((String) names.get(position));
-                            //delete(position,(String)names.get(position));
+                        public void onItemClick(AdapterView<?> parent, final View view, final int position, long id) {
+                            PopupMenu menu=new PopupMenu(getApplicationContext(),view);
+                            menu.getMenuInflater().inflate(R.menu.menu,menu.getMenu());
+
+                            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem item) {
+                                    switch (item.getItemId()){
+                                        case R.id.view:
+                                            displayLayout.setVisibility(View.VISIBLE);
+                                            close.setVisibility(View.VISIBLE);
+                                            getInfo(names.get(position).toString());
+                                            break;
+                                        case R.id.delete:
+                                            delete(position,names.get(position).toString());
+                                            break;
+                                        case R.id.update:
+                                            Intent i=new Intent(display.this,Update.class);
+                                            i.putExtra("name", (String) names.get(position));
+                                            i.putExtra("pos",position);
+                                            startActivity(i);
+                                            break;
+                                    }
+                                    return false;
+                                }
+                            });
+                            menu.show();
                         }
                     });
                 }else {

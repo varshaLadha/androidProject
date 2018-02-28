@@ -70,11 +70,12 @@
         android:layout_below="@id/image"/>
 
     <Button
-        android:id="@+id/getUsers"
+        android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/add"
         android:layout_centerHorizontal="true"
-        android:textAllCaps="false"
-        android:text="Get All Users"/>
+        android:text="Cancel"
+        android:textAllCaps="false"/>
+
 </RelativeLayout>

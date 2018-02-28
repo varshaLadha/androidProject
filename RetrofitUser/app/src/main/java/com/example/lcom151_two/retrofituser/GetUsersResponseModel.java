@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by lcom151-two on 2/27/2018.
- */
-
 public class GetUsersResponseModel {
 
     @SerializedName("success")

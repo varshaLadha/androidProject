@@ -65,7 +65,7 @@ app.delete('/api/user/:name',(req,res) => {
 })
 
 app.put('/api/user/:name',(req,res) => {
-    con.query("CALL updateUser('"+req.body.fname+"','"+req.body.lname+"','"+req.body.mobile+"','"+req.params.name+"','"+bcrypt.hashSync(req.body.password)+"')",(err,rows,fields) => {
+    con.query("CALL updateUser('"+req.params.name+"','"+req.body.lname+"','"+req.body.mobile+"','"+req.body.fname+"','"+bcrypt.hashSync(req.body.password)+"')",(err,rows,fields) => {
         if(err || rows.affectedRows==0)
             return res.send({"success":0,"message":"enter all the details"})
 

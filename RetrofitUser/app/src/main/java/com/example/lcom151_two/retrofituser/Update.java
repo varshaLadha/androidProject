@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telecom.Call;
+import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,11 +31,26 @@ public class Update extends BaseClass {
         fname=(EditText)findViewById(R.id.fname);
         lname=(EditText)findViewById(R.id.lname);
         mobile=(EditText)findViewById(R.id.mobile);
+        password=(EditText)findViewById(R.id.password);
         email=(TextView)findViewById(R.id.email);
+        update=(Button)findViewById(R.id.update);
         Intent i=getIntent();
-        String name=i.getStringExtra("name");
+        final String name=i.getStringExtra("name");
 
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String fn=fname.getText().toString();
+                String ln=lname.getText().toString();
+                String pass=password.getText().toString();
+                String mno=mobile.getText().toString();
+                if(TextUtils.isEmpty(fn) || TextUtils.isEmpty(ln) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(mno)){
+                    Toast.makeText(Update.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
+                }else {
+                    updateData(fn,ln,mno,pass,name);
+                }
+            }
+        });
 
         getData(name);
     }
@@ -57,7 +74,25 @@ public class Update extends BaseClass {
         });
     }
 
-    public void updateData(String fname,String lname,String mobile,String password,String name){
-
+    public void updateData(final String fname, String lname, String mobile, String password, String name){
+        retrofit2.Call<DeleteUserResponseModel> call=apiInterface.updateUser(name,lname,mobile,fname,password);
+        call.enqueue(new Callback<DeleteUserResponseModel>() {
+            @Override
+            public void onResponse(retrofit2.Call<DeleteUserResponseModel> call, Response<DeleteUserResponseModel> response) {
+                DeleteUserResponseModel deleteUserResponseModel=response.body();
+                if(deleteUserResponseModel.getSuccess()==1){
+                    Intent i=new Intent(Update.this,display.class);
+                    startActivity(i);
+                    finish();
+                    Toast.makeText(Update.this, deleteUserResponseModel.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(Update.this, deleteUserResponseModel.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(retrofit2.Call<DeleteUserResponseModel> call, Throwable t) {
+            }
+        });
     }
 }

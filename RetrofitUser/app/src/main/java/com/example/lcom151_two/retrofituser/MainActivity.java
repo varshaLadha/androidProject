@@ -24,7 +24,7 @@ import retrofit2.Response;
 
 public class MainActivity extends BaseClass {
 
-    Button submit,image,getAll;
+    Button submit,image,cancel;
     EditText fname,lname,email,password,mobile;
     String sampleFile="";
     ImageView iview;
@@ -37,8 +37,8 @@ public class MainActivity extends BaseClass {
         setContentView(R.layout.activity_main);
 
         submit=(Button)findViewById(R.id.add);
+        cancel=(Button)findViewById(R.id.cancel);
         image=(Button)findViewById(R.id.image);
-        getAll=(Button)findViewById(R.id.getUsers);
         fname=(EditText)findViewById(R.id.fname);
         lname=(EditText)findViewById(R.id.lname);
         email=(EditText)findViewById(R.id.email);
@@ -57,11 +57,12 @@ public class MainActivity extends BaseClass {
             }
         });
 
-        getAll.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i=new Intent(MainActivity.this,display.class);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -112,6 +113,9 @@ public class MainActivity extends BaseClass {
                 InsertUserResponseModel insertUserResponseModel=response.body();
                 if(insertUserResponseModel.getStatus()==1){
                     Toast.makeText(MainActivity.this, insertUserResponseModel.getMsg(), Toast.LENGTH_SHORT).show();
+                    Intent i=new Intent(MainActivity.this,display.class);
+                    startActivity(i);
+                    finish();
                 }else {
                     Toast.makeText(MainActivity.this, insertUserResponseModel.getMsg(), Toast.LENGTH_SHORT).show();
                 }

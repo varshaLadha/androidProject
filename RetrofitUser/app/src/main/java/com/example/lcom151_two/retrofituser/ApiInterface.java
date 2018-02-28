@@ -8,7 +8,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface ApiInterface {
 
@@ -30,11 +29,12 @@ public interface ApiInterface {
     @DELETE("api/user/{name}")
     Call<DeleteUserResponseModel> delUSer(@Path("name") String name);
 
+    @FormUrlEncoded
     @PUT("api/user/{name}")
-    Call<DeleteUserResponseModel> updateUser(@Field("fname") String fname,
+    Call<DeleteUserResponseModel> updateUser(@Path("name") String name,
                                              @Field("lname") String lname,
                                              @Field("mobile") String mobile,
-                                             @Path("name") String name,
+                                             @Field("fname") String fname,
                                              @Field("password") String password);
 
 
